@@ -44,6 +44,18 @@ export default () => {
   const [sentenceMaxLength, setSentenceMaxLength] = useState(Defaults.SentenceMaxLength);
   const classes = useStyles();
 
+  useEffect(() => {
+    const ping = () => {
+      console.log("Ping");
+      fetch(`${apiHost()}/api/v1/ping`)
+      .then(response => response.text())
+      .then(response => console.log(response));
+    };
+    ping();
+    const handle = setInterval(ping, 60000);
+    return () => clearInterval(handle);
+  }, []);
+
   const post = async (action: string) => {
     if (input) {
       var url = `${apiHost()}/lyricizer/api/v1/${action}?numberOfSentences=${numberOfSentences}&insertLineBreaks=${insertLineBreaks}&sentenceMinLength=${sentenceMinLength}&sentenceMaxLength=${sentenceMaxLength}`;
